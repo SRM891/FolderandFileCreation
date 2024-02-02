@@ -3,6 +3,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -25,7 +28,7 @@ public class Main {
             if (bool) {
                 System.out.println("Folder is created successfully");
                 try {
-                    String fileName = name + Math.random() * 100;
+                    String fileName = name + (Math.random() * 100);
                     File myObj = new File(path + "/" + fileName + ".json");
                     if (myObj.createNewFile()) {
                         System.out.println("File created: " + myObj.getName());
@@ -40,9 +43,15 @@ public class Main {
                     String phone = sc.next();
                     System.out.println("Enter you address: ");
                     String address = sc.next();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("Name", name);
+                    jsonObject.put("Destination", destination);
+                    jsonObject.put("Email", email);
+                    jsonObject.put("Phone", phone);
+                    jsonObject.put("Address", address);
                     try {
                         FileWriter myWriter = new FileWriter(new File(path, fileName + ".json"));
-                        myWriter.write("Name: "+name + "\n" + "Destination: " + destination + "\n" + "Email: "+ email + "\n" + "Phone: "+ phone + "\n" + "Address: "+ address);
+                        myWriter.write(jsonObject.toString());
                         myWriter.close();
                         System.out.println("Successfully wrote to the file.");
                     } catch (IOException e) {
@@ -52,6 +61,8 @@ public class Main {
                 } catch (IOException e) {
                     System.out.println("An error occurred.");
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
             } else {
                 System.out.println("Error Found!");
